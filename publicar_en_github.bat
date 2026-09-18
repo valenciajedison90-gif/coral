@@ -6,21 +6,17 @@ cls
 echo ======================================================================
 echo    🧜‍♀️ CORAL — Publicador Automatico a GitHub Pages
 echo    Autor: jjedi90
+echo    Repositorio: https://github.com/valenciajedison90-gif/coral.git
 echo ======================================================================
 echo.
-echo 1. Asegúrate de haber creado el repositorio en:
-echo    👉 https://github.com/new
-echo    - Nombre del repositorio: coral
-echo    - Tipo: Public
-echo.
-echo Si ya lo creaste, presiona cualquier tecla para subir el proyecto...
+echo Presiona cualquier tecla para sincronizar y subir a GitHub...
 pause > nul
 echo.
-echo [1/3] Configurando enlace con GitHub (https://github.com/jjedi90/coral.git)...
+echo [1/2] Verificando enlace remoto con GitHub...
 git remote remove origin 2>nul
-git remote add origin https://github.com/jjedi90/coral.git
+git remote add origin https://github.com/valenciajedison90-gif/coral.git
 
-echo [2/3] Subiendo rama main a GitHub...
+echo [2/2] Subiendo rama main a GitHub...
 git push -u origin main
 
 if %ERRORLEVEL% equ 0 (
@@ -30,12 +26,11 @@ if %ERRORLEVEL% equ 0 (
     echo    El juego fue subido a GitHub con éxito.
     echo.
     echo    En unos minutos estará disponible mundialmente en:
-    echo    👉 https://jjedi90.github.io/coral/
+    echo    👉 https://valenciajedison90-gif.github.io/coral/
     echo ======================================================================
 ) else (
     echo.
-    echo [!] Hubo un error o se solicitaron credenciales de GitHub.
-    echo     Verifica que el repositorio 'coral' exista en tu cuenta 'jjedi90'.
+    echo [!] Hubo un detalle al subir los archivos o se requieren credenciales.
 )
 echo.
 pause
