@@ -139,8 +139,8 @@ export class WorldManager {
       if (b.life <= 0) this.bubbles.splice(i, 1);
     }
 
-    // Burbujas ambientales automáticas ocasionales cerca de la vista
-    if (Math.random() < 0.35) {
+    // Burbujas ambientales ligeras optimizadas
+    if (this.bubbles.length < 18 && Math.random() < 0.14) {
       this.spawnBubbles(
         camera.x + Math.random() * camera.viewportWidth,
         camera.y + camera.viewportHeight + 20,
@@ -223,17 +223,17 @@ export class WorldManager {
     }
     ctx.restore();
 
-    // 3. Cáusticas de luz marina ondulante (Malla brillante de agua)
+    // 3. Cáusticas de luz marina ondulante (Optimizada para 60 FPS)
     ctx.save();
-    ctx.globalAlpha = Math.max(0.04, 0.14 - depthRatio * 0.1);
+    ctx.globalAlpha = Math.max(0.04, 0.12 - depthRatio * 0.08);
     ctx.strokeStyle = '#a5f3fc';
-    ctx.lineWidth = 2.5;
-    for (let cy = 40; cy < viewportHeight; cy += 80) {
+    ctx.lineWidth = 2.0;
+    for (let cy = 80; cy < viewportHeight; cy += 160) {
       ctx.beginPath();
       ctx.moveTo(0, cy);
-      for (let cx = 0; cx <= viewportWidth + 60; cx += 40) {
-        const worldX = cx + camera.x * 0.4;
-        const wave = Math.sin(worldX * 0.02 + now * 1.5) * 12 + Math.cos((cy + now * 20) * 0.03) * 10;
+      const worldOffset = camera.x * 0.25;
+      for (let cx = 0; cx <= viewportWidth + 60; cx += 80) {
+        const wave = Math.sin((cx + worldOffset) * 0.012 + now * 1.4) * 14;
         ctx.lineTo(cx, cy + wave);
       }
       ctx.stroke();
@@ -261,22 +261,18 @@ export class WorldManager {
     }
     ctx.restore();
 
-    // 5. Algas marinas ondulantes
+    // 5. Algas marinas ondulantes (Optimizada con curva Bézier fluida)
     ctx.save();
+    ctx.lineWidth = 12;
+    ctx.lineCap = 'round';
     for (const sw of this.seaweeds) {
       if (camera.isVisible(sw.x - 30, sw.y - sw.height, 60, sw.height + 40)) {
         const sp = camera.worldToScreen(sw.x, sw.y);
         ctx.strokeStyle = sw.color;
-        ctx.lineWidth = 14;
-        ctx.lineCap = 'round';
+        const sway = Math.sin(now * 1.5 + sw.phase) * 22;
         ctx.beginPath();
         ctx.moveTo(sp.x, sp.y);
-
-        const segHeight = sw.height / sw.segments;
-        for (let s = 1; s <= sw.segments; s++) {
-          const sway = Math.sin(now * 1.6 + sw.phase + s * 0.4) * (s * 4);
-          ctx.lineTo(sp.x + sway, sp.y - s * segHeight);
-        }
+        ctx.quadraticCurveTo(sp.x + sway * 0.5, sp.y - sw.height * 0.5, sp.x + sway, sp.y - sw.height);
         ctx.stroke();
       }
     }
@@ -339,26 +335,36 @@ export class WorldManager {
   }
 
   drawForeground(ctx, camera) {
-    // 1. Burbujas con reflejo especular
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-    ctx.fillStyle = 'rgba(42, 213, 196, 0.25)';
-    ctx.lineWidth = 1.2;
+    // 1. Burbujas con trazo agrupado de alto rendimiento
+    if (this.bubbles.length > 0) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+      ctx.fillStyle = 'rgba(42, 213, 196, 0.25)';
+      ctx.lineWidth = 1.2;
 
-    for (const b of this.bubbles) {
-      const sp = camera.worldToScreen(b.x, b.y);
       ctx.beginPath();
-      ctx.arc(sp.x, sp.y, b.radius, 0, Math.PI * 2);
+      for (const b of this.bubbles) {
+        const sp = camera.worldToScreen(b.x, b.y);
+        ctx.moveTo(sp.x + b.radius, sp.y);
+        ctx.arc(sp.x, sp.y, b.radius, 0, Math.PI * 2);
+      }
       ctx.fill();
       ctx.stroke();
 
+      // Reflejos especulares en lote
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.arc(sp.x - b.radius * 0.3, sp.y - b.radius * 0.3, b.radius * 0.35, 0, Math.PI * 2);
+      for (const b of this.bubbles) {
+        const sp = camera.worldToScreen(b.x, b.y);
+        const rX = sp.x - b.radius * 0.3;
+        const rY = sp.y - b.radius * 0.3;
+        const rRad = b.radius * 0.35;
+        ctx.moveTo(rX + rRad, rY);
+        ctx.arc(rX, rY, rRad, 0, Math.PI * 2);
+      }
       ctx.fill();
-      ctx.fillStyle = 'rgba(42, 213, 196, 0.25)';
+      ctx.restore();
     }
-    ctx.restore();
 
     // 2. Destellos de partículas
     ctx.save();

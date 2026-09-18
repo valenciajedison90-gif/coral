@@ -29,8 +29,8 @@ export class MusicEngine {
     this.currentStep = 0;
     this.nextStepTime = 0;
     this.schedulerTimer = null;
-    this.scheduleAheadTime = 0.18; // segundos hacia adelante
-    this.lookaheadInterval = 35;   // ms entre comprobaciones
+    this.scheduleAheadTime = 0.35; // segundos hacia adelante
+    this.lookaheadInterval = 85;   // ms entre comprobaciones (ligero para CPU móvil)
 
     this.ambientSource = null;
     this.ambientFilter = null;

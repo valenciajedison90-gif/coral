@@ -18,10 +18,10 @@ export class Mermaid {
 
     this.vx = 0;
     this.vy = 0;
-    this.baseSpeed = 195;
+    this.baseSpeed = 275;
     this.speed = this.baseSpeed;
-    this.acceleration = 720;
-    this.waterDrag = 0.88; // Inercia fluida del agua
+    this.acceleration = 1250;
+    this.waterDrag = 0.90; // Inercia fluida y respuesta rápida del agua
 
     this.facing = 1; // 1: Derecha, -1: Izquierda
     this.character = MERMAID_PROFILES[characterId] || MERMAID_PROFILES.aria;

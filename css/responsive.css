@@ -29,9 +29,8 @@
   position: absolute;
   width: 54px;
   height: 54px;
-  background: rgba(11, 60, 93, 0.75);
+  background: rgba(11, 60, 93, 0.92);
   border: 2px solid var(--c-aqua);
-  backdrop-filter: blur(8px);
   border-radius: 16px;
   color: #ffffff;
   font-size: 24px;

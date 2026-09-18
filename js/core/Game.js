@@ -122,6 +122,22 @@ export class Game {
     const resize = () => {
       const windowW = window.innerWidth;
       const windowH = window.innerHeight;
+      const isMobile = windowW <= 860 || windowH <= 520 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+      // Resolución optimizada: 960x540 en móviles (44% menos píxeles para GPU rápida a 60 FPS) y 1280x720 en PC
+      const targetW = isMobile ? 960 : 1280;
+      const targetH = isMobile ? 540 : 720;
+
+      if (this.width !== targetW || this.height !== targetH) {
+        this.width = targetW;
+        this.height = targetH;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        if (this.camera) {
+          this.camera.setViewportSize(this.width, this.height);
+        }
+      }
+
       const targetRatio = this.width / this.height;
       const windowRatio = windowW / windowH;
 
@@ -149,8 +165,8 @@ export class Game {
 
   calculateAutoZoom() {
     const isMobile = window.innerWidth <= 860 || window.innerHeight <= 520 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    // En móviles y tablets aumentamos un 65% el tamaño de la cámara para que los dibujos se vean grandes y nítidos
-    return isMobile ? 1.65 : 1.15;
+    // En móviles a 960x540, el zoom 1.25x produce dibujos grandes (+66%) con altísima tasa de cuadros (60 FPS)
+    return isMobile ? 1.25 : 1.15;
   }
 
   toggleZoom() {

@@ -12,14 +12,18 @@ export class CoralObstacle {
     this.width = width;
     this.height = height;
     this.type = type; // 'reef', 'rock', 'pillar', 'seaweed'
+    this.cachedCanvas = null;
+    this.pad = 16;
+    this.renderToCache();
   }
 
-  draw(ctx, camera) {
-    if (!camera.isVisible(this.x, this.y, this.width, this.height)) return;
-
-    const screenPos = camera.worldToScreen(this.x, this.y);
-    const drawX = Math.round(screenPos.x);
-    const drawY = Math.round(screenPos.y);
+  renderToCache() {
+    this.cachedCanvas = document.createElement('canvas');
+    this.cachedCanvas.width = Math.ceil(this.width + this.pad * 2);
+    this.cachedCanvas.height = Math.ceil(this.height + this.pad * 2);
+    const ctx = this.cachedCanvas.getContext('2d');
+    const drawX = this.pad;
+    const drawY = this.pad;
 
     ctx.save();
 
@@ -32,7 +36,11 @@ export class CoralObstacle {
 
       ctx.fillStyle = reefGrad;
       ctx.beginPath();
-      ctx.roundRect(drawX, drawY, this.width, this.height, 14);
+      if (ctx.roundRect) {
+        ctx.roundRect(drawX, drawY, this.width, this.height, 14);
+      } else {
+        ctx.rect(drawX, drawY, this.width, this.height);
+      }
       ctx.fill();
 
       // Borde de roca marina profunda
@@ -46,7 +54,6 @@ export class CoralObstacle {
         ctx.beginPath();
         ctx.arc(drawX + ox, drawY + 3, 9, Math.PI, 0);
         ctx.fill();
-        // Detalle brillante en el coral
         ctx.fillStyle = '#fca5a5';
         ctx.fillRect(drawX + ox - 2, drawY - 4, 4, 3);
         ctx.fillStyle = '#ff6b8b';
@@ -78,7 +85,11 @@ export class CoralObstacle {
 
       ctx.fillStyle = rockGrad;
       ctx.beginPath();
-      ctx.roundRect(drawX, drawY, this.width, this.height, 10);
+      if (ctx.roundRect) {
+        ctx.roundRect(drawX, drawY, this.width, this.height, 10);
+      } else {
+        ctx.rect(drawX, drawY, this.width, this.height);
+      }
       ctx.fill();
 
       // Capa de musgo / biofiltro verdoso
@@ -126,6 +137,17 @@ export class CoralObstacle {
     }
 
     ctx.restore();
+  }
+
+  draw(ctx, camera) {
+    if (!camera.isVisible(this.x, this.y, this.width, this.height)) return;
+    if (!this.cachedCanvas) this.renderToCache();
+
+    const screenPos = camera.worldToScreen(this.x, this.y);
+    ctx.drawImage(
+      this.cachedCanvas,
+      Math.round(screenPos.x) - this.pad,
+      Math.round(screenPos.y) - this.pad
   }
 }
 
