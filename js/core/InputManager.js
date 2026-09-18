@@ -125,10 +125,23 @@ export class InputManager {
 
   // Inicializa los controles virtuales táctiles en pantalla
   initTouchControls(dpadContainer, actionContainer) {
-    if (this.isTouchDevice && dpadContainer && actionContainer) {
-      dpadContainer.classList.add('active-touch');
-      actionContainer.classList.add('active-touch');
-    }
+    const activate = () => {
+      const isTouch = ('ontouchstart' in window) || 
+                      (navigator.maxTouchPoints > 0) || 
+                      (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || 
+                      window.innerWidth <= 960;
+      if (isTouch && dpadContainer && actionContainer) {
+        dpadContainer.classList.add('active-touch');
+        actionContainer.classList.add('active-touch');
+      }
+    };
+
+    activate();
+    window.addEventListener('touchstart', activate, { passive: true });
+    window.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') activate();
+    }, { passive: true });
+    window.addEventListener('resize', activate);
 
     const bindButton = (el, actionName) => {
       if (!el) return;

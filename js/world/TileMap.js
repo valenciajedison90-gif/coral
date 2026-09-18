@@ -19,8 +19,8 @@ export class CoralObstacle {
 
   renderToCache() {
     this.cachedCanvas = document.createElement('canvas');
-    this.cachedCanvas.width = Math.ceil(this.width + this.pad * 2);
-    this.cachedCanvas.height = Math.ceil(this.height + this.pad * 2);
+    this.cachedCanvas.width = Math.max(1, Math.ceil(this.width + this.pad * 2));
+    this.cachedCanvas.height = Math.max(1, Math.ceil(this.height + this.pad * 2));
     const ctx = this.cachedCanvas.getContext('2d');
     const drawX = this.pad;
     const drawY = this.pad;
@@ -142,12 +142,14 @@ export class CoralObstacle {
   draw(ctx, camera) {
     if (!camera.isVisible(this.x, this.y, this.width, this.height)) return;
     if (!this.cachedCanvas) this.renderToCache();
+    if (!this.cachedCanvas || this.cachedCanvas.width === 0 || this.cachedCanvas.height === 0) return;
 
     const screenPos = camera.worldToScreen(this.x, this.y);
     ctx.drawImage(
       this.cachedCanvas,
       Math.round(screenPos.x) - this.pad,
       Math.round(screenPos.y) - this.pad
+    );
   }
 }
 
