@@ -214,6 +214,24 @@ Para usar imágenes PNG o spritesheets:
 
 ---
 
+## 🌐 Publicación en GitHub Pages (En Línea)
+
+El proyecto está 100% preparado para ser publicado en **GitHub Pages** con despliegue continuo automático mediante GitHub Actions.
+
+### Pasos Rápidos para Publicar:
+1. Crea un repositorio público en [github.com/new](https://github.com/new) con el nombre `coral`.
+2. Haz doble clic en el archivo `publicar_en_github.bat` (o ejecuta desde la terminal):
+   ```bash
+   git remote add origin https://github.com/jjedi90/coral.git
+   git push -u origin main
+   ```
+3. En tu repositorio de GitHub, ve a **Settings** > **Pages**:
+   * En **Build and deployment > Source**, selecciona **GitHub Actions** (o **Deploy from a branch** -> `main` / `root`).
+4. ¡Tu juego quedará publicado y jugable en todo el mundo en:
+   👉 **https://jjedi90.github.io/coral/**
+
+---
+
 ## 👑 Autor y Créditos
 
 * **Autor, Creador y Desarrollador Original**: **jjedi90**
