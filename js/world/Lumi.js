@@ -20,6 +20,16 @@ export class Lumi {
     this.y = this.baseY + Math.sin(this.animTimer) * 6;
   }
 
+  isCollidingWith(box) {
+    if (!box) return false;
+    return (
+      box.x < this.x + this.width &&
+      box.x + box.width > this.x &&
+      box.y < this.y + this.height &&
+      box.y + box.height > this.y
+    );
+  }
+
   draw(ctx, camera) {
     const screenPos = camera.worldToScreen(this.x, this.y);
     const drawX = Math.round(screenPos.x);

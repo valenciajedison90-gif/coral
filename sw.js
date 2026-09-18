@@ -4,7 +4,7 @@
 // sw.js — Service Worker para Juego sin Conexión y Rendimiento PWA
 // ==========================================================================
 
-const CACHE_NAME = 'coral-submarina-v1.4.1';
+const CACHE_NAME = 'coral-submarina-v1.4.2';
 
 const ASSETS_TO_CACHE = [
   './',

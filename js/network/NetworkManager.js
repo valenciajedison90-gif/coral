@@ -40,6 +40,7 @@ export class NetworkManager {
     this.portalPresence = new Map(); // peerId -> boolean (si está dentro del portal)
     this.syncInterval = null;
     this.lastSyncSent = 0;
+    this.isClearingLevel = false;
 
     // Callbacks para la UI
     this.onLobbyUpdate = null;
@@ -518,12 +519,20 @@ export class NetworkManager {
 
     // ¿Están todas las sirenas en el portal?
     if (inPortalCount === totalPlayers && totalPlayers > 0) {
+      if (this.isClearingLevel) return;
+      this.isClearingLevel = true;
+
       const nextLevel = this.game.currentLevelIndex + 1;
       this.broadcast({
         type: MSG_TYPES.LEVEL_CLEAR,
         nextLevel
       });
       this.game.handleCooperativeLevelClear(nextLevel);
+
+      setTimeout(() => {
+        this.isClearingLevel = false;
+        this.portalPresence.clear();
+      }, 3000);
     }
   }
 
@@ -558,6 +567,7 @@ export class NetworkManager {
     this.roomCode = null;
     this.lobbyPlayers = [];
     this.portalPresence.clear();
+    this.isClearingLevel = false;
 
     if (this.connections) {
       for (const conn of this.connections.values()) {

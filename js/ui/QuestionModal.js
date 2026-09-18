@@ -229,6 +229,8 @@ export class QuestionModal {
         return;
       }
 
+      if (this.currentShell) this.currentShell.opened = true;
+
       this.showFeedback(
         '💙 Casi lo logras',
         `No te preocupes, lo importante es seguir aprendiendo.\n\n${this.currentQuestion.explicacion}`,

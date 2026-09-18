@@ -33,6 +33,7 @@ export class Level {
     for (const cp of this.checkpoints) cp.update(dt);
     for (const e of this.enemies) e.update(dt, solidObstacles);
     if (this.exitPortal) this.exitPortal.update(dt);
+    if (this.lumi) this.lumi.update(dt);
   }
 
   draw(ctx, camera) {
@@ -86,6 +87,11 @@ export class Level {
     // 8. Dibujar Criaturas Enemigas
     for (const enemy of this.enemies) {
       enemy.draw(ctx, camera);
+    }
+
+    // 9. Dibujar Mascota Lumi (Nivel 5)
+    if (this.lumi) {
+      this.lumi.draw(ctx, camera);
     }
   }
 }

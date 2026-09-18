@@ -69,6 +69,7 @@ export class Game {
     this.toastTimer = 0;
     this.projectiles = [];
     this.hasFlowerPower = this.saveData.hasFlowerPower || false;
+    this.isLevelTransitioning = false;
 
     // Multijugador en Línea y UI
     this.networkManager = new NetworkManager(this);
@@ -197,6 +198,9 @@ export class Game {
 
   // Inicia la partida en modo multijugador cooperativo
   startMultiplayerAdventure(levelIndex = 1, players = []) {
+    if (this.mainMenu) this.mainMenu.hideAll();
+    if (this.multiplayerLobbyModal) this.multiplayerLobbyModal.hide();
+
     this.playerManager.clearRemoteMermaids();
     const myChar = this.networkManager.myCharacterId || 'aria';
     this.saveData.selectedCharacter = myChar;
@@ -266,6 +270,9 @@ export class Game {
   }
 
   handleCooperativeLevelClear(nextLevel) {
+    if (this.isLevelTransitioning) return;
+    this.isLevelTransitioning = true;
+
     this.audioManager.playCheckpoint();
     this.hud.updateCoopPortalBadge(0, 0);
 
@@ -276,9 +283,16 @@ export class Game {
         if (this.currentLevel && this.currentLevel.exitPortal) {
           this.currentLevel.exitPortal.setCoopStatus(0, this.networkManager.lobbyPlayers.length);
         }
+        // Reposicionar compañeras remotas al inicio del nuevo nivel
+        for (const remote of this.playerManager.remoteMermaids.values()) {
+          remote.x = this.currentLevel.playerStart.x;
+          remote.y = this.currentLevel.playerStart.y;
+        }
+        this.isLevelTransitioning = false;
       }, 1200);
     } else {
       this.handleCooperativeVictory();
+      this.isLevelTransitioning = false;
     }
   }
 
@@ -328,6 +342,7 @@ export class Game {
     }
     this.projectiles = [];
     this.camera.follow(startX, startY, true);
+    this.isLevelTransitioning = false;
 
     this.updateHUD();
   }
@@ -379,7 +394,8 @@ export class Game {
     this.updateHUD();
 
     const mermaid = this.playerManager.getActiveMermaid();
-    const cp = this.saveData.checkpoint || { x: this.currentLevel.playerStart.x, y: this.currentLevel.playerStart.y };
+    const hasValidCp = this.saveData.checkpoint && this.saveData.checkpoint.level === this.currentLevelIndex;
+    const cp = hasValidCp ? this.saveData.checkpoint : { x: this.currentLevel.playerStart.x, y: this.currentLevel.playerStart.y };
 
     if (mermaid) {
       mermaid.resetPosition(cp.x, cp.y);
@@ -631,7 +647,8 @@ export class Game {
     }
 
     // 12. Encuentro con Lumi en el Castillo de Morgana (Nivel 5)
-    if (level.lumi && level.lumi.isCollidingWith(mermaid)) {
+    if (level.lumi && !level.lumi.isRescued && level.lumi.isCollidingWith(mermaid)) {
+      level.lumi.isRescued = true;
       this.audioManager.playLumiRescue();
       if (this.networkManager.isOnline) {
         if (this.networkManager.isHost) {
@@ -645,6 +662,9 @@ export class Game {
   }
 
   handleLevelClear() {
+    if (this.isLevelTransitioning) return;
+    this.isLevelTransitioning = true;
+
     this.audioManager.playPortal();
     this.audioManager.playLevelComplete();
 
@@ -669,6 +689,7 @@ export class Game {
       this.audioManager.playMusic('victory');
       this.saveData.achievements.rescatista = true;
       this.saveProgress();
+      this.isLevelTransitioning = false;
 
       const stats = {
         coins: this.coins,

@@ -174,6 +174,8 @@ export class MultiplayerLobbyModal {
     if (this.btnStartGame) {
       this.btnStartGame.addEventListener('click', () => {
         this.game.audioManager.playClick();
+        this.btnStartGame.disabled = true;
+        this.btnStartGame.textContent = '⏳ ¡Iniciando para todos...! 🚀';
         this.game.networkManager.startGame();
       });
     }
@@ -223,6 +225,10 @@ export class MultiplayerLobbyModal {
     if (isHost) {
       this.hostControls.classList.remove('hidden');
       this.clientWaitingMsg.classList.add('hidden');
+      if (this.btnStartGame) {
+        this.btnStartGame.disabled = false;
+        this.btnStartGame.innerHTML = '🚀 Iniciar Juego ▶';
+      }
     } else {
       this.hostControls.classList.add('hidden');
       this.clientWaitingMsg.classList.remove('hidden');
@@ -269,10 +275,24 @@ export class MultiplayerLobbyModal {
 
       this.playersGrid.appendChild(slotEl);
     }
+
+    // Actualizar botón de Iniciar Juego para el Anfitrión
+    if (this.btnStartGame && this.game.networkManager.isHost) {
+      const count = players.length;
+      if (count > 1) {
+        this.btnStartGame.innerHTML = `🚀 Iniciar Juego (${count} Sirenas Conectadas) ▶`;
+      } else {
+        this.btnStartGame.innerHTML = `🚀 Iniciar Juego (Solo Tú) ▶`;
+      }
+      this.btnStartGame.disabled = false;
+    }
   }
 
   onStartGameTriggered(levelIndex, players) {
     this.hide();
+    if (this.game.mainMenu) {
+      this.game.mainMenu.hideAll();
+    }
     this.game.startMultiplayerAdventure(levelIndex, players);
   }
 }
