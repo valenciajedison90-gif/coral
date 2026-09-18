@@ -5,17 +5,28 @@
 // ==========================================================================
 
 export class Camera {
-  constructor(viewportWidth, viewportHeight, worldWidth, worldHeight) {
-    this.viewportWidth = viewportWidth;
-    this.viewportHeight = viewportHeight;
+  constructor(viewportWidth, viewportHeight, worldWidth, worldHeight, zoom = 1.0) {
+    this.baseViewportWidth = viewportWidth;
+    this.baseViewportHeight = viewportHeight;
     this.worldWidth = worldWidth;
     this.worldHeight = worldHeight;
+    this.zoom = zoom;
+
+    this.viewportWidth = this.baseViewportWidth / this.zoom;
+    this.viewportHeight = this.baseViewportHeight / this.zoom;
 
     this.x = 0;
     this.y = 0;
     this.targetX = 0;
     this.targetY = 0;
     this.smoothFactor = 0.08; // Factor de interpolación suave (Lerp)
+  }
+
+  setZoom(zoom) {
+    this.zoom = Math.max(0.6, Math.min(3.0, zoom));
+    this.viewportWidth = this.baseViewportWidth / this.zoom;
+    this.viewportHeight = this.baseViewportHeight / this.zoom;
+    this.clamp();
   }
 
   setWorldSize(width, height) {
@@ -25,8 +36,10 @@ export class Camera {
   }
 
   setViewportSize(width, height) {
-    this.viewportWidth = width;
-    this.viewportHeight = height;
+    this.baseViewportWidth = width;
+    this.baseViewportHeight = height;
+    this.viewportWidth = width / this.zoom;
+    this.viewportHeight = height / this.zoom;
     this.clamp();
   }
 
@@ -76,8 +89,8 @@ export class Camera {
 
   screenToWorld(sx, sy) {
     return {
-      x: sx + this.x,
-      y: sy + this.y
+      x: sx / this.zoom + this.x,
+      y: sy / this.zoom + this.y
     };
   }
 }

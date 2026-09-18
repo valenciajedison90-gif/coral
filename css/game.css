@@ -118,25 +118,51 @@
 #question-modal-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(3, 14, 23, 0.82);
+  background: rgba(3, 14, 23, 0.88);
   backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 80;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .shell-modal {
   background: radial-gradient(circle at 50% 20%, #15557e 0%, #082942 90%);
   border: 3px solid var(--c-aqua);
-  border-radius: 28px;
-  padding: 26px 22px;
-  max-width: 580px;
-  width: 92%;
+  border-radius: 24px;
+  padding: 20px 22px;
+  max-width: 600px;
+  width: 95%;
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 0 35px rgba(42, 213, 196, 0.5), 0 20px 50px rgba(0, 0, 0, 0.8);
   text-align: center;
-  animation: shellOpen 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: shellOpen 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
+  box-sizing: border-box;
+  margin: auto;
+}
+
+/* Scrollbar estilizado para la Concha */
+.shell-modal::-webkit-scrollbar {
+  width: 6px;
+}
+.shell-modal::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+.shell-modal::-webkit-scrollbar-thumb {
+  background: var(--c-aqua);
+  border-radius: 4px;
 }
 
 @keyframes shellOpen {
@@ -148,7 +174,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .shell-category-tag {
@@ -170,29 +197,30 @@
 }
 
 .shell-question-text {
-  font-size: clamp(16px, 3.2vw, 20px);
+  font-size: clamp(15px, 3.2vw, 19px);
   font-weight: 700;
-  line-height: 1.5;
-  margin-bottom: 20px;
+  line-height: 1.45;
+  margin-bottom: 16px;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  flex-shrink: 0;
 }
 
 /* Lista de Opciones */
 .shell-options-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
 .shell-option-btn {
   background: rgba(255, 255, 255, 0.08);
   border: 2px solid rgba(42, 213, 196, 0.35);
-  border-radius: 18px;
-  padding: 12px 18px;
+  border-radius: 16px;
+  padding: 10px 14px;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -200,6 +228,10 @@
   align-items: center;
   gap: 12px;
   transition: all 0.15s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  user-select: none;
 }
 
 .shell-option-btn:hover:not(:disabled) {
@@ -240,31 +272,41 @@
 
 /* Área de Explicación y Recompensa */
 .shell-feedback-box {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(42, 213, 196, 0.3);
   border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 16px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
   text-align: left;
   animation: fadeIn 0.2s ease;
+  flex-shrink: 0;
 }
 
 .shell-feedback-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .shell-feedback-text {
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.4;
   color: #e2e8f0;
 }
 
 .shell-tools-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.shell-tools-row button {
+  touch-action: manipulation;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 /* Tienda Rápida de Utilidades */

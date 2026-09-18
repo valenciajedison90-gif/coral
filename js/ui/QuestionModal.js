@@ -88,6 +88,10 @@ export class QuestionModal {
     // Renderizar las 4 opciones
     this.renderOptions(question);
 
+    // Restablecer scroll al inicio del modal
+    const modal = this.overlay.querySelector('.shell-modal');
+    if (modal) modal.scrollTop = 0;
+
     // Mostrar overlay
     this.overlay.classList.remove('hidden');
   }
@@ -100,16 +104,22 @@ export class QuestionModal {
 
     question.opciones.forEach((opcion, index) => {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'shell-option-btn';
       btn.innerHTML = `
         <span class="option-letter">${letters[index]}</span>
         <span class="option-text">${opcion}</span>
       `;
 
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        if (e) e.stopPropagation();
         if (!this.answered) {
           this.handleAnswer(index, btn);
         }
+      });
+
+      btn.addEventListener('pointerdown', (e) => {
+        if (e) e.stopPropagation();
       });
 
       this.optionsContainer.appendChild(btn);
@@ -235,6 +245,13 @@ export class QuestionModal {
     this.feedbackTitle.style.color = color;
     this.feedbackText.textContent = text;
     this.feedbackBox.classList.remove('hidden');
+
+    const modal = this.overlay.querySelector('.shell-modal');
+    if (modal) {
+      setTimeout(() => {
+        modal.scrollTo({ top: modal.scrollHeight, behavior: 'smooth' });
+      }, 50);
+    }
   }
 
   close() {

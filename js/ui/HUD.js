@@ -16,11 +16,18 @@ export class HUD {
     this.coopPortalBadge = document.getElementById('hud-coop-portal-badge');
     this.soundBtn = document.getElementById('btn-toggle-sound');
     this.pauseBtn = document.getElementById('btn-open-pause');
+    this.zoomBtn = document.getElementById('btn-toggle-zoom');
 
     this.bindEvents();
   }
 
   bindEvents() {
+    if (this.zoomBtn) {
+      this.zoomBtn.addEventListener('click', () => {
+        this.game.toggleZoom();
+      });
+    }
+
     if (this.soundBtn) {
       this.soundBtn.addEventListener('click', () => {
         const isMuted = this.game.audioManager.toggleMute();

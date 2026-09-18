@@ -11,7 +11,7 @@ window.__CORAL_METADATA__ = {
   title: 'CORAL — La Gran Aventura Submarina',
   author: 'jjedi90',
   creator: 'jjedi90',
-  version: '1.2.0',
+  version: '1.3.0',
   copyright: '© Todos los derechos reservados a jjedi90'
 };
 window.CORAL_AUTHOR = 'jjedi90';

@@ -44,7 +44,9 @@ export class Game {
     // Subsistemas Centrales
     this.stateManager = new GameStateManager(STATES.MENU);
     this.input = new InputManager();
-    this.camera = new Camera(this.width, this.height, 3200, 2000);
+    this.userCustomZoom = false;
+    const initialZoom = this.calculateAutoZoom();
+    this.camera = new Camera(this.width, this.height, 3200, 2000, initialZoom);
     this.audioManager = new AudioManager();
     this.playerManager = new PlayerManager();
     this.questionManager = new QuestionManager();
@@ -134,11 +136,34 @@ export class Game {
 
       this.canvas.style.width = `${Math.floor(rW)}px`;
       this.canvas.style.height = `${Math.floor(rH)}px`;
+
+      if (!this.userCustomZoom && this.camera) {
+        this.camera.setZoom(this.calculateAutoZoom());
+      }
     };
 
     window.addEventListener('resize', resize);
     window.addEventListener('orientationchange', () => setTimeout(resize, 200));
     resize();
+  }
+
+  calculateAutoZoom() {
+    const isMobile = window.innerWidth <= 860 || window.innerHeight <= 520 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    // En móviles y tablets aumentamos un 65% el tamaño de la cámara para que los dibujos se vean grandes y nítidos
+    return isMobile ? 1.65 : 1.15;
+  }
+
+  toggleZoom() {
+    this.userCustomZoom = true;
+    const current = this.camera.zoom;
+    let nextZoom = 1.65;
+    if (current < 1.35) nextZoom = 1.65;
+    else if (current < 1.8) nextZoom = 2.0;
+    else nextZoom = 1.15;
+
+    this.camera.setZoom(nextZoom);
+    const label = nextZoom >= 1.9 ? 'Extra Grande (2.0x)' : (nextZoom >= 1.5 ? 'Celular / Grande (1.65x)' : 'Panorámico (1.15x)');
+    this.showToast(`🔍 Zoom de cámara: ${label}`);
   }
 
   startAdventure(characterId) {
@@ -647,6 +672,11 @@ export class Game {
 
     if (!currentLevel) return;
 
+    ctx.save();
+    if (camera.zoom && camera.zoom !== 1.0) {
+      ctx.scale(camera.zoom, camera.zoom);
+    }
+
     // 1. Fondo submarino con parallax, rayos de sol y algas
     this.worldManager.drawBackground(ctx, camera, currentLevel);
 
@@ -671,6 +701,8 @@ export class Game {
 
     // 4. Dibujar efectos de primer plano (burbujas, destellos, textos flotantes)
     this.worldManager.drawForeground(ctx, camera);
+
+    ctx.restore();
   }
 }
 
