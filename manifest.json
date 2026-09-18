@@ -1,0 +1,42 @@
+{
+  "name": "CORAL — La Gran Aventura Submarina",
+  "short_name": "CORAL",
+  "description": "Videojuego educativo submarino para niños y niñas. Explora arrecifes, responde preguntas del saber y rescata a Lumi.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#051622",
+  "theme_color": "#051622",
+  "author": "jjedi90",
+  "developer": {
+    "name": "jjedi90"
+  },
+  "categories": ["games", "education"],
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

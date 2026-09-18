@@ -1,0 +1,243 @@
+/* ==========================================================================
+   CORAL — La Gran Aventura Submarina
+   Autor y Desarrollador: jjedi90
+   css/responsive.css — Controles Táctiles D-Pad 4 Direcciones y Adaptabilidad
+   ========================================================================== */
+
+/* Contenedor del D-Pad Táctil Virtual */
+#touch-dpad-container {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  z-index: 60;
+  display: none; /* Se activa mediante JS si es táctil o por configuración */
+  pointer-events: auto;
+}
+
+#touch-dpad-container.active-touch {
+  display: block;
+}
+
+/* Cruceta de 4 Direcciones */
+.dpad-cross {
+  position: relative;
+  width: 170px;
+  height: 170px;
+}
+
+.dpad-touch-btn {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  background: rgba(11, 60, 93, 0.75);
+  border: 2px solid var(--c-aqua);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  color: #ffffff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  touch-action: none;
+  transition: transform 0.08s, background-color 0.08s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dpad-touch-btn:active,
+.dpad-touch-btn.pressed {
+  background: rgba(42, 213, 196, 0.85);
+  transform: scale(0.92);
+  border-color: #ffffff;
+  box-shadow: 0 0 16px rgba(42, 213, 196, 0.8);
+}
+
+/* Posicionamiento en cruz */
+.dpad-touch-btn.up {
+  top: 0;
+  left: 58px;
+}
+
+.dpad-touch-btn.down {
+  bottom: 0;
+  left: 58px;
+}
+
+.dpad-touch-btn.left {
+  top: 58px;
+  left: 0;
+}
+
+.dpad-touch-btn.right {
+  top: 58px;
+  right: 0;
+}
+
+.dpad-touch-btn.center-hub {
+  top: 58px;
+  left: 58px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* Botones de Acción Táctiles en la derecha (Turbo, Habilidad, Disparo) */
+#touch-action-container {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 60;
+  display: none;
+  pointer-events: auto;
+}
+
+#touch-action-container.active-touch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-touch-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-coral-pink), var(--c-coral-orange));
+  border: 2.5px solid rgba(255, 255, 255, 0.9);
+  color: white;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.08s, box-shadow 0.08s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-touch-btn:active,
+.action-touch-btn.pressed {
+  transform: scale(0.9);
+  box-shadow: 0 0 24px rgba(255, 107, 139, 0.9);
+}
+
+/* Botón Turbo (Nadar Rápido) */
+.turbo-touch-btn {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #00d2ff, #0072ff);
+  box-shadow: 0 6px 18px rgba(0, 162, 255, 0.45);
+  font-size: 24px;
+}
+
+.turbo-touch-btn:active,
+.turbo-touch-btn.pressed {
+  transform: scale(0.9);
+  box-shadow: 0 0 22px rgba(0, 210, 255, 0.9);
+}
+
+/* Botón Disparo (Flor de la Vida) */
+.shoot-touch-btn {
+  width: 66px;
+  height: 66px;
+  background: linear-gradient(135deg, #ff4fa8, #e0115f);
+  box-shadow: 0 6px 20px rgba(255, 79, 168, 0.5);
+  font-size: 28px;
+}
+
+.shoot-touch-btn:active,
+.shoot-touch-btn.pressed {
+  transform: scale(0.9);
+  box-shadow: 0 0 26px rgba(255, 79, 168, 0.95);
+}
+
+/* Media Queries para Pantallas Pequeñas */
+@media (max-width: 768px) {
+  #game-hud {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+  }
+
+  .hud-badge {
+    padding: 4px 8px;
+    font-size: 12px;
+    gap: 5px;
+  }
+
+  .action-touch-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+
+  .turbo-touch-btn {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+
+  .shoot-touch-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+
+  .hud-icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .character-select-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .character-card {
+    padding: 10px 8px;
+  }
+
+  .char-avatar-canvas {
+    width: 60px;
+    height: 60px;
+  }
+
+  .char-name {
+    font-size: 16px;
+  }
+
+  .shell-modal {
+    padding: 18px 14px;
+  }
+
+  .shell-question-text {
+    font-size: 16px;
+  }
+
+  .shell-option-btn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Bloqueo o advertencia si el móvil está en vertical muy estrecho */
+@media (max-width: 480px) and (orientation: portrait) {
+  .portrait-hint {
+    display: block !important;
+  }
+}
+
+.portrait-hint {
+  display: none;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--c-gold-yellow);
+}
+
+/* © jjedi90 — Todos los derechos reservados. */

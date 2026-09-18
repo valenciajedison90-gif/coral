@@ -1,0 +1,21 @@
+{
+  "name": "coral-la-gran-aventura-submarina",
+  "version": "1.2.0",
+  "description": "Videojuego educativo submarino en HTML5 Canvas 2D, CSS3 y JavaScript ES6+",
+  "main": "js/main.js",
+  "author": "jjedi90",
+  "creator": "jjedi90",
+  "publisher": "jjedi90",
+  "license": "UNLICENSED",
+  "private": true,
+  "copyright": "© jjedi90. Todos los derechos reservados.",
+  "keywords": [
+    "coral",
+    "videojuego",
+    "html5-game",
+    "canvas2d",
+    "education",
+    "jjedi90",
+    "pwa"
+  ]
+}

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Fondo abisal degradado -->
+    <radialGradient id="oceanBg" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#19658e"/>
+      <stop offset="50%" stop-color="#0b3c5d"/>
+      <stop offset="100%" stop-color="#031522"/>
+    </radialGradient>
+
+    <!-- Degradado de la cola de sirena -->
+    <linearGradient id="mermaidTail" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2ad5c4"/>
+      <stop offset="50%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+
+    <!-- Degradado dorado místico -->
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="60%" stop-color="#ffd152"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+
+    <!-- Resplandor floral -->
+    <radialGradient id="flowerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff66b2"/>
+      <stop offset="70%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="rgba(225, 29, 72, 0)"/>
+    </radialGradient>
+
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo circular redondeado con borde turquesa -->
+  <rect width="512" height="512" rx="112" fill="url(#oceanBg)"/>
+  <rect width="496" height="496" x="8" y="8" rx="104" fill="none" stroke="#2ad5c4" stroke-width="6" opacity="0.65"/>
+
+  <!-- Rayos de luz submarina y burbujas decorativas -->
+  <g opacity="0.35">
+    <circle cx="90" cy="110" r="14" fill="#ffffff"/>
+    <circle cx="130" cy="80" r="8" fill="#ffffff"/>
+    <circle cx="410" cy="140" r="18" fill="#ffffff"/>
+    <circle cx="440" cy="90" r="10" fill="#ffffff"/>
+    <circle cx="80" cy="420" r="12" fill="#2ad5c4"/>
+    <circle cx="430" cy="410" r="16" fill="#2ad5c4"/>
+  </g>
+
+  <!-- Gran Concha Marina Dorada del Saber de fondo -->
+  <g filter="url(#dropShadow)">
+    <!-- Concha estilizada -->
+    <path d="M 256 120 C 170 120 120 180 140 270 C 150 320 200 370 256 390 C 312 370 362 320 372 270 C 392 180 342 120 256 120 Z" 
+          fill="rgba(11, 60, 93, 0.75)" stroke="url(#goldGlow)" stroke-width="8"/>
+    
+    <!-- Estrías de la concha -->
+    <path d="M 256 390 L 256 120" stroke="url(#goldGlow)" stroke-width="4" opacity="0.6"/>
+    <path d="M 256 390 Q 210 240 180 150" stroke="url(#goldGlow)" stroke-width="3" opacity="0.6"/>
+    <path d="M 256 390 Q 302 240 332 150" stroke="url(#goldGlow)" stroke-width="3" opacity="0.6"/>
+    <path d="M 256 390 Q 180 290 145 220" stroke="url(#goldGlow)" stroke-width="3" opacity="0.5"/>
+    <path d="M 256 390 Q 332 290 367 220" stroke="url(#goldGlow)" stroke-width="3" opacity="0.5"/>
+  </g>
+
+  <!-- Cola de Sirena Mágica Ondulante Central -->
+  <g filter="url(#dropShadow)">
+    <!-- Cuerpo y torso superior -->
+    <ellipse cx="256" cy="200" rx="20" ry="26" fill="#fed7aa"/>
+    
+    <!-- Cola esbelta curvada -->
+    <path d="M 240 215 Q 220 290 260 335 Q 285 365 256 405 Q 225 355 242 290 Q 252 245 272 215 Z" 
+          fill="url(#mermaidTail)" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Aleta caudal majestuosa bifurcada -->
+    <path d="M 256 405 C 230 415 190 445 210 470 C 235 480 255 440 256 425 C 257 440 277 480 302 470 C 322 445 282 415 256 405 Z" 
+          fill="url(#mermaidTail)" stroke="#ffffff" stroke-width="3"/>
+
+    <!-- Cabello violeta / rosado ondeante -->
+    <path d="M 256 160 C 210 155 200 210 190 250 C 210 230 230 220 256 220 C 275 220 295 230 310 245 C 305 205 295 155 256 160 Z" 
+          fill="#c084fc"/>
+
+    <!-- Rostro y cabeza de la sirena -->
+    <circle cx="256" cy="175" r="22" fill="#fed7aa"/>
+
+    <!-- Flor de la Vida / Corona de Flores en la cabeza -->
+    <circle cx="256" cy="155" r="14" fill="url(#flowerGlow)"/>
+    <circle cx="256" cy="155" r="6" fill="#fef08a"/>
+    <circle cx="244" cy="158" r="4.5" fill="#f472b6"/>
+    <circle cx="268" cy="158" r="4.5" fill="#f472b6"/>
+  </g>
+
+  <!-- Gran Perla Mágica Luminosa y Destello -->
+  <circle cx="256" cy="265" r="18" fill="url(#goldGlow)" filter="url(#dropShadow)"/>
+  <circle cx="252" cy="260" r="5" fill="#ffffff"/>
+
+  <!-- Título CORAL en la parte inferior con tipografía estilizada -->
+  <text x="256" y="475" font-family="'Arial Rounded MT Bold', 'Outfit', sans-serif" font-size="44" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="4" filter="url(#dropShadow)">
+    CORAL
+  </text>
+</svg>

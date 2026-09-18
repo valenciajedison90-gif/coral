@@ -1,0 +1,498 @@
+/* ==========================================================================
+   CORAL — La Gran Aventura Submarina
+   Autor y Desarrollador: jjedi90
+   css/menu.css — Menús Principales, Selección de Sirena, Modales
+   ========================================================================== */
+
+/* Capa de Pantalla Completa para Menús */
+.menu-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(13, 75, 117, 0.85) 0%, rgba(5, 22, 34, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+/* Título Principal */
+.game-title-container {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.game-title {
+  font-size: clamp(32px, 6vw, 54px);
+  font-weight: 900;
+  color: var(--c-soft-aqua);
+  text-shadow: 0 4px 18px rgba(42, 213, 196, 0.6), 0 2px 4px rgba(0,0,0,0.8);
+  letter-spacing: 1px;
+}
+
+.game-subtitle {
+  font-size: clamp(15px, 2.5vw, 22px);
+  color: var(--c-coral-pink);
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Botones de Menú */
+.menu-btn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.menu-btn {
+  background: linear-gradient(135deg, #1d6a8a, #0b3c5d);
+  border: 2px solid var(--c-aqua);
+  border-radius: 28px;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 800;
+  padding: 14px 24px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.menu-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(42, 213, 196, 0.5);
+  border-color: var(--c-soft-aqua);
+}
+
+.menu-btn:active {
+  transform: scale(0.97);
+}
+
+.menu-btn-play {
+  background: linear-gradient(135deg, var(--c-coral-pink), var(--c-coral-orange));
+  border-color: #ffe6aa;
+  font-size: 22px;
+  padding: 16px 28px;
+}
+
+/* Selector de Personajes (4 Sirenas) */
+.character-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  max-width: 900px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.character-card {
+  background: var(--c-bg-card);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 18px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--c-shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.character-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--c-aqua);
+}
+
+.character-card.selected {
+  border-color: var(--c-gold-yellow);
+  box-shadow: 0 0 20px rgba(255, 209, 82, 0.7);
+  background: rgba(18, 64, 102, 0.95);
+  transform: scale(1.03);
+}
+
+.char-avatar-canvas {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 10px;
+}
+
+.char-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--c-gold-yellow);
+  margin-bottom: 4px;
+}
+
+.char-title {
+  font-size: 13px;
+  color: var(--c-soft-aqua);
+  margin-bottom: 8px;
+}
+
+.char-ability-box {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #e2e8f0;
+  width: 100%;
+}
+
+.char-ability-tag {
+  color: var(--c-aqua);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Modales de Historia, Logros y Configuración */
+.dialog-modal {
+  background: var(--c-bg-card);
+  border: 2px solid var(--c-aqua);
+  border-radius: 24px;
+  padding: 28px 24px;
+  max-width: 520px;
+  width: 92%;
+  box-shadow: var(--c-shadow-card);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.dialog-modal h2 {
+  font-size: 26px;
+  color: var(--c-gold-yellow);
+  margin-bottom: 16px;
+}
+
+.dialog-modal p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e0f2fe;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  margin: 16px 0;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.achievement-item.unlocked {
+  border-color: var(--c-gold-yellow);
+  background: rgba(255, 209, 82, 0.1);
+}
+
+.achievement-icon {
+  font-size: 26px;
+}
+
+.achievement-info h4 {
+  font-size: 15px;
+  color: var(--c-soft-aqua);
+}
+
+.achievement-info p {
+  font-size: 12px;
+  margin-bottom: 0;
+  color: #94a3b8;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 14px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* --- Estilos del Modo Multijugador Cooperativo Online --- */
+.menu-btn-coop {
+  background: linear-gradient(135deg, #0284c7, #0d9488);
+  border-color: #38bdf8;
+  box-shadow: 0 4px 18px rgba(14, 165, 233, 0.45);
+}
+
+.menu-btn-coop:hover {
+  background: linear-gradient(135deg, #0369a1, #0f766e);
+  box-shadow: 0 6px 24px rgba(56, 189, 248, 0.65);
+}
+
+.mp-text-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1.5px solid var(--c-aqua);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.mp-text-input:focus {
+  border-color: var(--c-gold-yellow);
+  box-shadow: 0 0 12px rgba(255, 209, 82, 0.5);
+}
+
+.mp-char-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mp-char-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 8px 10px;
+  cursor: pointer;
+  color: #ffffff;
+  text-align: left;
+  transition: transform 0.1s, border-color 0.15s, background-color 0.15s;
+}
+
+.mp-char-card:hover {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.mp-char-card.selected {
+  border-color: var(--c-gold-yellow);
+  background: rgba(255, 209, 82, 0.18);
+  box-shadow: 0 0 14px rgba(255, 209, 82, 0.35);
+}
+
+.mp-char-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.mp-char-name {
+  font-weight: 700;
+  font-size: 14px;
+  display: block;
+}
+
+.mp-char-role {
+  font-size: 11px;
+  color: var(--c-soft-aqua);
+  display: block;
+}
+
+.mp-room-banner {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid var(--c-aqua);
+  border-radius: 16px;
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mp-room-code-tag {
+  font-size: 24px;
+  letter-spacing: 3px;
+  color: var(--c-gold-yellow);
+  font-family: monospace;
+}
+
+.mp-players-slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.mp-slot-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mp-slot-card.occupied {
+  border-color: var(--c-aqua);
+  background: rgba(42, 213, 196, 0.08);
+}
+
+.mp-slot-card.empty {
+  opacity: 0.65;
+  border-style: dashed;
+}
+
+.mp-slot-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #082942;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.empty-avatar {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.mp-slot-name {
+  font-weight: 800;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.empty-text {
+  font-weight: 500;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.mp-slot-mermaid {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mp-slot-status {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.mp-slot-status.ready {
+  color: #4ade80;
+}
+
+.mp-slot-status.waiting {
+  color: #94a3b8;
+}
+
+/* --- Estilos del Modal de Instalación en Celular (PWA) --- */
+.pwa-install-box {
+  max-width: 520px;
+  text-align: center;
+  border: 2px solid var(--c-aqua);
+  box-shadow: 0 0 35px rgba(42, 213, 196, 0.4), 0 20px 50px rgba(0, 0, 0, 0.8);
+  animation: pwaPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pwaPop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.pwa-icon-glow {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 10px auto;
+  border-radius: 22px;
+  background: radial-gradient(circle, rgba(42, 213, 196, 0.4) 0%, rgba(5, 22, 34, 0) 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pwa-preview-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.pwa-features-list {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.pwa-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #e0f2fe;
+}
+
+.pwa-feature-item span {
+  font-size: 22px;
+}
+
+.pwa-ios-guide {
+  background: rgba(14, 165, 233, 0.18);
+  border: 1.5px solid var(--c-aqua);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  text-align: left;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+.pwa-buttons-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* © jjedi90 — Todos los derechos reservados. */

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CORAL">
+  <meta name="theme-color" content="#051622">
+  <meta name="author" content="jjedi90">
+  <meta name="creator" content="jjedi90">
+  <meta name="copyright" content="© jjedi90">
+  <title>🧜‍♀️ CORAL — La Gran Aventura Submarina</title>
+
+  <!-- Manifiesto PWA e Iconos de Aplicación Móvil -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+  <!-- Hojas de Estilo Modulares -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/game.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Librería WebRTC P2P para Multijugador Cooperativo sin Servidor -->
+  <script src="js/peerjs.min.js"></script>
+</head>
+<body>
+
+  <div id="game-wrapper">
+    <!-- Burbujas Ambientales Flotantes -->
+    <div class="ambient-bubble" style="left: 10%; width: 18px; height: 18px; animation-duration: 11s;"></div>
+    <div class="ambient-bubble" style="left: 25%; width: 28px; height: 28px; animation-duration: 15s; animation-delay: 2s;"></div>
+    <div class="ambient-bubble" style="left: 60%; width: 14px; height: 14px; animation-duration: 9s; animation-delay: 4s;"></div>
+    <div class="ambient-bubble" style="left: 80%; width: 22px; height: 22px; animation-duration: 13s; animation-delay: 1s;"></div>
+
+    <!-- HUD Superior del Juego -->
+    <header id="game-hud">
+      <div class="hud-section">
+        <div class="hud-badge" title="Vidas de la sirena">
+          <span id="hud-lives-display" class="hud-lives">❤️❤️❤️</span>
+        </div>
+        <div class="hud-badge" title="Monedas submarinas">
+          🪙 <span id="hud-coins-display">0</span>
+        </div>
+        <div class="hud-badge" title="Puntos de experiencia educativa">
+          ⭐ <span id="hud-xp-display">0 XP</span>
+        </div>
+        <div class="hud-badge" title="Llaves misteriosas encontradas">
+          🔑 <span id="hud-keys-display">0/3</span>
+        </div>
+        <div class="hud-badge hud-badge-flower" id="hud-flower-badge" style="display: none;" title="Poder de la Flor de la Vida activo">
+          🌸 <span class="flower-txt">Balitas</span>
+        </div>
+        <div class="hud-badge hud-badge-coop" id="hud-coop-portal-badge" style="display: none;" title="Estado de reunión en el portal">
+          🧜‍♀️ Portal: 1/2
+        </div>
+      </div>
+
+      <div class="hud-section">
+        <button id="btn-toggle-sound" class="hud-icon-btn" title="Activar/Silenciar sonido" aria-label="Sonido">🔊</button>
+        <button id="btn-open-pause" class="hud-icon-btn" title="Menú de pausa y tienda" aria-label="Pausa y Tienda">⏸️</button>
+      </div>
+    </header>
+
+    <!-- Canvas Principal del Mundo Submarino -->
+    <canvas id="viewport-canvas" width="1280" height="720"></canvas>
+
+    <!-- Notificación Flotante / Toast (Islas de Coral, Logros, etc.) -->
+    <div id="game-toast">🌟 ¡Punto de Coral activado!</div>
+
+    <!-- Controles Táctiles D-Pad para Celulares y Tablets -->
+    <div id="touch-dpad-container">
+      <div class="dpad-cross">
+        <button id="btn-dpad-up" class="dpad-touch-btn up" aria-label="Nadar Arriba">▲</button>
+        <button id="btn-dpad-left" class="dpad-touch-btn left" aria-label="Nadar a la Izquierda">◀</button>
+        <div class="dpad-touch-btn center-hub"></div>
+        <button id="btn-dpad-right" class="dpad-touch-btn right" aria-label="Nadar a la Derecha">▶</button>
+        <button id="btn-dpad-down" class="dpad-touch-btn down" aria-label="Nadar Abajo">▼</button>
+      </div>
+    </div>
+
+    <!-- Botones Táctiles de Acción (Turbo, Habilidad, Disparo de Balitas) -->
+    <div id="touch-action-container">
+      <button id="btn-touch-turbo" class="action-touch-btn turbo-touch-btn" aria-label="Nadar Rápido" title="Turbo (Nadar Rápido)">🚀</button>
+      <button id="btn-touch-action" class="action-touch-btn" aria-label="Activar Habilidad Especial" title="Habilidad Especial">⚡</button>
+      <button id="btn-touch-shoot" class="action-touch-btn shoot-touch-btn" aria-label="Disparar Balitas" title="Disparar Balitas">🌸</button>
+    </div>
+
+    <!-- Modal Educativo "Concha del Saber" -->
+    <div id="question-modal-overlay" class="hidden">
+      <div class="shell-modal">
+        <div class="shell-header">
+          <span id="shell-category-badge" class="shell-category-tag">🔬 CIENCIAS</span>
+          <span id="shell-difficulty-badge" class="shell-difficulty-tag">NIVEL FÁCIL</span>
+        </div>
+
+        <h3 id="shell-question-content" class="shell-question-text">
+          ¿Cuál es el planeta más grande de nuestro Sistema Solar?
+        </h3>
+
+        <!-- Opciones A, B, C, D -->
+        <div id="shell-options-list" class="shell-options-grid"></div>
+
+        <!-- Panel de Explicación y Recompensa -->
+        <div id="shell-feedback-panel" class="shell-feedback-box hidden">
+          <div id="shell-feedback-heading" class="shell-feedback-title">✨ ¡Muy bien!</div>
+          <div id="shell-feedback-description" class="shell-feedback-text">Explicación...</div>
+        </div>
+
+        <div class="shell-tools-row">
+          <button id="shell-btn-hint" class="btn-secondary">💡 Usar Pista (5 🪙)</button>
+          <button id="shell-btn-continue" class="menu-btn menu-btn-play hidden" style="padding: 10px 24px; font-size: 16px;">
+            Continuar Explorando ➔
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú de Pausa y Tienda Rápida -->
+    <div id="pause-modal-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal">
+        <h2>⏸️ AVENTURA EN PAUSA</h2>
+        <p style="text-align: center; color: var(--c-soft-aqua);">
+          Aprovecha tus monedas recolectadas para adquirir utilidades para tu viaje:
+        </p>
+
+        <!-- Tienda de Utilidades -->
+        <div id="pause-shop-grid" class="quick-shop-grid"></div>
+
+        <div class="menu-btn-list" style="margin: 16px auto 0 auto;">
+          <button id="btn-pause-resume" class="menu-btn menu-btn-play">▶ Reanudar Aventura</button>
+          <button id="btn-pause-restart" class="menu-btn">🔄 Reiniciar Nivel</button>
+          <button id="btn-pause-main-menu" class="menu-btn">🏠 Menú Principal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú Principal -->
+    <div id="main-menu-overlay" class="menu-overlay">
+      <div class="game-title-container">
+        <h1 class="game-title">🧜‍♀️ CORAL</h1>
+        <div class="game-subtitle">La Gran Aventura Submarina</div>
+      </div>
+
+      <div class="menu-btn-list">
+        <button id="btn-menu-play" class="menu-btn menu-btn-play">▶ MODO INDIVIDUAL</button>
+        <button id="btn-menu-multiplayer" class="menu-btn menu-btn-coop">🌐 MULTIJUGADOR ONLINE (HASTA 4)</button>
+        <button id="btn-menu-select-char" class="menu-btn">👤 ELEGIR SIRENA</button>
+        <button id="btn-menu-story" class="menu-btn">📖 HISTORIA</button>
+        <button id="btn-menu-achievements" class="menu-btn">🏆 LOGROS</button>
+        <button id="btn-menu-settings" class="menu-btn">⚙ CONFIGURACIÓN</button>
+      </div>
+
+      <div class="menu-credits-footer" style="margin-top: 14px; text-align: center; font-size: 13px; color: var(--c-soft-aqua); opacity: 0.85; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">
+        🌊 Videojuego creado y desarrollado por <strong style="color: var(--c-gold-yellow); font-weight: 700;">jjedi90</strong> • Todos los derechos reservados
+      </div>
+    </div>
+
+    <!-- Modal de Selección de Sirenas (Aria, Marina, Coral, Naya) -->
+    <div id="character-select-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal" style="max-width: 820px;">
+        <h2>👤 ELIGE A TU SIRENA</h2>
+        <p style="text-align: center; margin-bottom: 20px;">
+          Cada sirena posee una habilidad única para superar los misterios submarinos:
+        </p>
+
+        <div id="character-cards-grid" class="character-select-grid"></div>
+
+        <button class="menu-btn menu-btn-play btn-close-modal" style="margin: 0 auto;">
+          ✨ ¡Aceptar Selección!
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal de Historia -->
+    <div id="story-modal-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal">
+        <h2>📖 EL MISTERIO DE LUMI</h2>
+        <p>
+          En las cristalinas aguas del reino de <strong>Coral</strong>, cuatro jóvenes sirenas vivían en armonía junto a <strong>Lumi</strong>, una pequeña criatura marina mágica y juguetona.
+        </p>
+        <p>
+          Un día de tormenta, la bruja marina <strong>Morgana</strong> atrapó a Lumi y la encerró en lo profundo de su castillo submarino.
+        </p>
+        <p>
+          Para rescatarla, deberás nadar por los arrecifes, resolver los misterios de las <strong>Conchas del Saber</strong>, conseguir las tres llaves sagradas y traer a Lumi de vuelta a casa con su familia.
+        </p>
+        <button class="menu-btn menu-btn-play btn-close-modal" style="margin: 10px auto 0 auto;">
+          ¡Entendido! ➔
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal de Logros -->
+    <div id="achievements-modal-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal">
+        <h2>🏆 TUS LOGROS MARINOS</h2>
+        <p style="text-align: center;">Demuestra tu valentía y sabiduría explorando el océano:</p>
+        <div id="achievements-items-list" class="achievements-list"></div>
+        <button class="btn-secondary btn-close-modal">Cerrar</button>
+      </div>
+    </div>
+
+    <!-- Modal de Configuración -->
+    <div id="settings-modal-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal" style="max-width: 580px;">
+        <h2>⚙ CONFIGURACIÓN Y CONTROLES</h2>
+
+        <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 14px 18px; margin: 16px 0; text-align: left; font-size: 14px; line-height: 1.8;">
+          <h4 style="color: var(--c-gold-yellow); margin-bottom: 8px;">🎮 Guía de Controles:</h4>
+          <div>🏊‍♀️ <strong>Nadar:</strong> Flechas / W-A-S-D o D-Pad Táctil</div>
+          <div>🚀 <strong>Turbo (Nadar Rápido):</strong> Tecla <kbd>Shift</kbd> o botón táctil 🚀</div>
+          <div>🌸 <strong>Disparar Balitas:</strong> Tecla <kbd>Espacio</kbd> / <kbd>F</kbd> o botón táctil 🌸 <em>(requiere Flor de la Vida)</em></div>
+          <div>⚡ <strong>Habilidad Especial:</strong> Tecla <kbd>E</kbd> / <kbd>Q</kbd> o botón táctil ⚡</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+          <button id="btn-settings-install-pwa" class="menu-btn menu-btn-play">📲 Instalar Juego en mi Celular</button>
+          <button id="btn-toggle-touch-controls" class="menu-btn">📱 Activar/Ocultar Controles Táctiles</button>
+          <button id="btn-reset-save" class="btn-secondary" style="background: rgba(239, 68, 68, 0.3); border-color: #ef4444; color: #fca5a5;">
+            🗑️ Borrar Progreso Guardado
+          </button>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.25); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; text-align: center; font-size: 13px; color: var(--c-soft-aqua);">
+          👑 <strong>Autor y Desarrollador:</strong> <span style="color: var(--c-gold-yellow); font-weight: bold; font-size: 14px;">jjedi90</span>
+          <br><small>© Todos los derechos reservados</small>
+        </div>
+
+        <button class="btn-secondary btn-close-modal">Volver</button>
+      </div>
+    </div>
+
+    <!-- Pantalla de Misión Cumplida / Victoria -->
+    <div id="results-modal-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal">
+        <h2>🌟 ¡MISIÓN CUMPLIDA!</h2>
+        <p style="text-align: center; color: var(--c-gold-yellow); font-weight: bold; font-size: 18px;">
+          ¡Has liberado a Lumi y regresado a casa a salvo con tu familia!
+        </p>
+
+        <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 18px; margin: 16px 0; text-align: left; line-height: 2;">
+          <div>🪙 Monedas Obtenidas: <strong id="stat-results-coins">0</strong></div>
+          <div>⭐ Experiencia Acumulada: <strong id="stat-results-xp">0 XP</strong></div>
+          <div>✨ Preguntas Correctas: <strong id="stat-results-correct">0</strong></div>
+          <div>💙 Preguntas Repasadas: <strong id="stat-results-incorrect">0</strong></div>
+          <div>⏱️ Tiempo de Aventura: <strong id="stat-results-time">0m 0s</strong></div>
+        </div>
+
+        <div style="text-align: center; font-size: 13px; color: var(--c-soft-aqua); margin-bottom: 14px;">
+          🌊 Videojuego original creado con ❤️ por <strong style="color: var(--c-gold-yellow);">jjedi90</strong>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+          <button id="btn-results-play-again" class="menu-btn menu-btn-play">Volver a Jugar</button>
+          <button class="menu-btn" disabled style="opacity: 0.5; cursor: not-allowed;">
+            Próximamente: Siguiente Aventura 🔒
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Multijugador Online (Salas y Conexión P2P) -->
+    <div id="multiplayer-lobby-overlay" class="menu-overlay hidden">
+      <div class="dialog-modal" style="max-width: 680px;">
+        <h2>🌐 AVENTURA COOPERATIVA ONLINE</h2>
+        <p style="text-align: center; margin-bottom: 16px; color: var(--c-soft-aqua);">
+          ¡Hasta 4 sirenas nadando juntas en tiempo real para rescatar a Lumi!
+        </p>
+
+        <!-- Panel 1: Elección (Crear o Unirse) -->
+        <div id="mp-panel-choice">
+          <div style="margin-bottom: 14px; text-align: left;">
+            <label style="font-weight: 700; font-size: 14px; color: var(--c-gold-yellow); display: block; margin-bottom: 6px;">
+              Tu Nombre de Sirena:
+            </label>
+            <input type="text" id="mp-input-name" class="mp-text-input" placeholder="Ej: Sofía, Aria, Juan..." maxlength="14" value="Aria">
+          </div>
+
+          <div style="margin-bottom: 16px; text-align: left;">
+            <label style="font-weight: 700; font-size: 14px; color: var(--c-gold-yellow); display: block; margin-bottom: 8px;">
+              Elige a tu Sirena:
+            </label>
+            <div id="mp-char-select-list" class="mp-char-grid"></div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button id="btn-mp-create-room" class="menu-btn menu-btn-play">👑 Crear Sala Nueva</button>
+            <button id="btn-mp-show-join" class="menu-btn">🔗 Unirme con Código de Sala</button>
+
+            <!-- Formulario Desplegable para Unirse -->
+            <div id="mp-join-form" class="hidden" style="background: rgba(0,0,0,0.35); border-radius: 14px; padding: 14px; margin-top: 6px;">
+              <label style="display: block; font-weight: 700; margin-bottom: 6px; font-size: 13px;">Escribe el Código de 5 letras:</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="mp-input-code" class="mp-text-input" placeholder="Ej: C7R9E" maxlength="8" style="text-transform: uppercase; font-size: 18px; letter-spacing: 2px; text-align: center;">
+                <button id="btn-mp-confirm-join" class="menu-btn menu-btn-play" style="padding: 8px 18px; font-size: 15px;">Entrar ➔</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 18px;">
+            <button id="btn-mp-close" class="btn-secondary">Volver al Menú</button>
+          </div>
+        </div>
+
+        <!-- Panel 2: Sala de Espera Activa -->
+        <div id="mp-panel-room" class="hidden">
+          <div class="mp-room-banner">
+            <div>
+              <span style="font-size: 13px; color: var(--c-soft-aqua); display: block;">CÓDIGO DE SALA:</span>
+              <strong id="mp-room-code-display" class="mp-room-code-tag">-----</strong>
+            </div>
+            <button id="btn-mp-copy-code" class="btn-secondary" style="padding: 6px 14px; font-size: 13px;">
+              📋 Copiar Código
+            </button>
+          </div>
+          <p style="font-size: 12px; color: var(--c-gold-yellow); margin-bottom: 14px;">
+            Comparte este código con tus amigas/os para que se unan desde sus celulares o computadoras.
+          </p>
+
+          <!-- Cuadrícula de Jugadoras Conectadas (Hasta 4) -->
+          <div id="mp-players-grid" class="mp-players-slots"></div>
+
+          <!-- Controles del Anfitrión -->
+          <div id="mp-host-controls" class="hidden" style="margin-top: 18px;">
+            <button id="btn-mp-start-game" class="menu-btn menu-btn-play" style="width: 100%; font-size: 18px;">
+              ▶ ¡Comenzar Aventura en Equipo!
+            </button>
+          </div>
+
+          <!-- Mensaje para Clientes -->
+          <div id="mp-client-waiting" class="hidden" style="margin-top: 16px; color: var(--c-soft-aqua); font-size: 15px;">
+            🌊 Esperando a que la anfitriona inicie la aventura...
+          </div>
+
+          <div style="margin-top: 16px;">
+            <button id="btn-mp-leave-room" class="btn-secondary" style="background: rgba(239, 68, 68, 0.25); border-color: #ef4444; color: #fca5a5;">
+              Abandonar Sala
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Emergente de Instalación en el Celular (PWA) -->
+    <div id="pwa-install-modal" class="menu-overlay hidden">
+      <div class="dialog-modal pwa-install-box">
+        <div class="pwa-icon-glow">
+          <img src="assets/icons/icon.svg" alt="CORAL App Icon" class="pwa-preview-icon">
+        </div>
+
+        <h2 style="margin-top: 10px; font-size: clamp(20px, 4vw, 26px);">📲 ¡INSTALA CORAL EN TU CELULAR!</h2>
+        
+        <p style="color: var(--c-soft-aqua); font-size: 15px; margin-bottom: 16px;">
+          Instala el juego para disfrutar de la experiencia completa como una aplicación de tu teléfono:
+        </p>
+
+        <div class="pwa-features-list">
+          <div class="pwa-feature-item">
+            <span>🎮</span>
+            <div><strong>Pantalla Completa:</strong> Sin barras ni botones de navegador.</div>
+          </div>
+          <div class="pwa-feature-item">
+            <span>⚡</span>
+            <div><strong>Carga Instantánea:</strong> Abre rápido con un toque en tu pantalla.</div>
+          </div>
+          <div class="pwa-feature-item">
+            <span>📶</span>
+            <div><strong>Juega sin Conexión:</strong> Funciona incluso sin señal de internet.</div>
+          </div>
+        </div>
+
+        <!-- Guía especial para usuarios de iPhone/iPad Safari -->
+        <div id="pwa-ios-instructions" class="pwa-ios-guide hidden">
+          <div style="font-weight: 700; color: var(--c-gold-yellow); margin-bottom: 6px;">
+            🍎 Para instalar en iPhone o iPad:
+          </div>
+          <div>
+            1. Toca el botón <strong>Compartir</strong> <span style="font-size: 18px;">⎋</span> abajo en Safari.
+          </div>
+          <div>
+            2. Desliza hacia abajo y elige <strong>"Agregar a pantalla de inicio" 📲</strong>.
+          </div>
+        </div>
+
+        <div class="pwa-buttons-row">
+          <button id="btn-pwa-install-now" class="menu-btn menu-btn-play" style="font-size: 17px; padding: 12px 28px;">
+            ⭐ ¡Instalar en mi Celular!
+          </button>
+          <button id="btn-pwa-dismiss" class="btn-secondary" style="margin-top: 0;">
+            Ahora no
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Principal Modular ES6 -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

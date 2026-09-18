@@ -1,0 +1,116 @@
+/* ==========================================================================
+   CORAL — La Gran Aventura Submarina
+   Autor y Desarrollador: jjedi90
+   css/main.css — Variables, Reset, Tipografía y Layout Base
+   ========================================================================== */
+
+:root {
+  /* Paleta Submarina */
+  --c-deep-ocean: #051622;
+  --c-ocean-blue: #0b3c5d;
+  --c-sea-teal: #1d6a8a;
+  --c-caribbean: #328cc1;
+  --c-aqua: #2ad5c4;
+  --c-soft-aqua: #d0f7f3;
+
+  /* Colores de Acento y Fantasía */
+  --c-coral-pink: #ff6b8b;
+  --c-coral-orange: #ff8e53;
+  --c-pearl-white: #fcfbfa;
+  --c-gold-yellow: #ffd152;
+  --c-magic-purple: #9d4edd;
+  --c-sea-green: #38b000;
+
+  /* UI & Sombras */
+  --c-bg-card: rgba(11, 44, 72, 0.88);
+  --c-border-card: rgba(42, 213, 196, 0.4);
+  --c-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --c-glow-aqua: 0 0 16px rgba(42, 213, 196, 0.6);
+
+  /* Tipografía */
+  --font-title: 'Comic Sans MS', 'Fredoka One', 'Quicksand', system-ui, -apple-system, sans-serif;
+  --font-body: 'Quicksand', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--c-deep-ocean);
+  font-family: var(--font-body);
+  color: var(--c-pearl-white);
+  touch-action: none;
+}
+
+/* Contenedor del Juego */
+#game-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 50% 30%, #0d4b75 0%, #06233a 65%, #020e17 100%);
+  overflow: hidden;
+}
+
+/* Canvas del Mundo Submarino */
+#viewport-canvas {
+  display: block;
+  image-rendering: auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  background-color: #0d4b75;
+  border-radius: 8px;
+}
+
+/* Burbujas flotantes de fondo ambiental */
+.ambient-bubble {
+  position: absolute;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(42, 213, 196, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatUp 12s infinite linear;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(105vh) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Clases Utilitarias */
+.hidden {
+  display: none !important;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* © jjedi90 — Todos los derechos reservados. */

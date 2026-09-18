@@ -1,0 +1,257 @@
+/* Estilos Generales y Optimización Móvil */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #090d16;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #ffffff;
+  touch-action: none; /* Deshabilita gestos no deseados del navegador (zoom, pull-to-refresh) */
+}
+
+/* Contenedor principal a pantalla completa */
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #1e293b 0%, #090d16 100%);
+  overflow: hidden;
+}
+
+/* Canvas del Juego con bordes redondeados y sombra */
+#gameCanvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
+  background-color: #38bdf8;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Barra Superior del HUD */
+#hud {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hud-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.hud-item {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-btn {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, background 0.2s;
+}
+
+.hud-btn:active {
+  transform: scale(0.9);
+  background: rgba(37, 99, 235, 0.8);
+}
+
+/* Controles Táctiles en Pantalla */
+#touch-controls {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.dpad {
+  display: flex;
+  gap: 14px;
+  pointer-events: auto;
+}
+
+.actions {
+  display: flex;
+  pointer-events: auto;
+}
+
+.touch-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.65);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.08s ease, border-color 0.08s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Efecto al presionar un botón virtual */
+.touch-btn:active,
+.touch-btn.active {
+  transform: scale(0.92);
+  background: rgba(37, 99, 235, 0.85);
+  border-color: #60a5fa;
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.6);
+}
+
+/* Botón de Salto más destacado */
+.jump-btn {
+  width: 82px;
+  height: 82px;
+  background: rgba(16, 185, 129, 0.65);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.jump-btn:active,
+.jump-btn.active {
+  background: rgba(5, 150, 105, 0.9);
+  border-color: #34d399;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.7);
+}
+
+/* Modal de Pantallas (Inicio, Victoria, Game Over) */
+#screen-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#screen-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.overlay-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 30px 24px;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.overlay-card h1 {
+  font-size: 26px;
+  margin-bottom: 12px;
+  color: #38bdf8;
+  text-shadow: 0 2px 10px rgba(56, 189, 248, 0.4);
+}
+
+.overlay-card p {
+  font-size: 15px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+  color: #ffffff;
+  padding: 14px 32px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+  transition: transform 0.1s, box-shadow 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.6);
+}
+
+/* Indicaciones de teclado en pantallas de escritorio */
+.pc-hint {
+  margin-top: 18px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* En dispositivos que tienen mouse/teclado y pantalla grande, los botones táctiles siguen disponibles o son más sutiles */
+@media (min-width: 900px) and (hover: hover) {
+  .touch-btn {
+    opacity: 0.8;
+  }
+  .touch-btn:hover {
+    opacity: 1;
+  }
+}

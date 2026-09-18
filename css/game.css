@@ -1,0 +1,351 @@
+/* ==========================================================================
+   CORAL — La Gran Aventura Submarina
+   Autor y Desarrollador: jjedi90
+   css/game.css — HUD, Modal "Concha del Saber", Tienda Rápida y Notificaciones
+   ========================================================================== */
+
+/* HUD Superior */
+#game-hud {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.hud-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-badge {
+  background: var(--c-bg-card);
+  border: 1.5px solid var(--c-border-card);
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+}
+
+.hud-badge-flower {
+  background: linear-gradient(135deg, rgba(255, 79, 168, 0.28), rgba(224, 17, 95, 0.4));
+  border-color: #ff66b2;
+  box-shadow: 0 0 15px rgba(255, 79, 168, 0.5);
+  animation: floralPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes floralPulse {
+  from {
+    border-color: #ff66b2;
+    box-shadow: 0 0 10px rgba(255, 79, 168, 0.4);
+  }
+  to {
+    border-color: #ffd152;
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.8), 0 0 30px rgba(255, 209, 82, 0.4);
+  }
+}
+
+.hud-badge-coop {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.35), rgba(13, 148, 136, 0.45));
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+  animation: coopPulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes coopPulse {
+  from {
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  }
+  to {
+    border-color: #ffd152;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.85);
+  }
+}
+
+.hud-lives {
+  letter-spacing: 2px;
+  font-size: 16px;
+}
+
+.hud-character-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--c-gold-yellow);
+  background: #0b3c5d;
+}
+
+.hud-icon-btn {
+  pointer-events: auto;
+  background: var(--c-bg-card);
+  border: 1.5px solid var(--c-border-card);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.1s, border-color 0.2s;
+}
+
+.hud-icon-btn:hover {
+  transform: scale(1.08);
+  border-color: var(--c-soft-aqua);
+}
+
+.hud-icon-btn:active {
+  transform: scale(0.92);
+}
+
+/* Modal "Concha del Saber" (Preguntas Educativas) */
+#question-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 14, 23, 0.82);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 80;
+}
+
+.shell-modal {
+  background: radial-gradient(circle at 50% 20%, #15557e 0%, #082942 90%);
+  border: 3px solid var(--c-aqua);
+  border-radius: 28px;
+  padding: 26px 22px;
+  max-width: 580px;
+  width: 92%;
+  box-shadow: 0 0 35px rgba(42, 213, 196, 0.5), 0 20px 50px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  animation: shellOpen 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+@keyframes shellOpen {
+  from { transform: scale(0.7) rotate(-3deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.shell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.shell-category-tag {
+  background: var(--c-magic-purple);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.shell-difficulty-tag {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--c-gold-yellow);
+}
+
+.shell-question-text {
+  font-size: clamp(16px, 3.2vw, 20px);
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Lista de Opciones */
+.shell-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.shell-option-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(42, 213, 196, 0.35);
+  border-radius: 18px;
+  padding: 12px 18px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.shell-option-btn:hover:not(:disabled) {
+  background: rgba(42, 213, 196, 0.2);
+  border-color: var(--c-soft-aqua);
+  transform: translateX(4px);
+}
+
+.shell-option-btn .option-letter {
+  background: var(--c-aqua);
+  color: var(--c-deep-ocean);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.shell-option-btn.correct {
+  background: rgba(56, 176, 0, 0.3) !important;
+  border-color: #70e000 !important;
+}
+
+.shell-option-btn.incorrect {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: #f87171 !important;
+}
+
+.shell-option-btn.disabled-hint {
+  opacity: 0.3;
+  pointer-events: none;
+  text-decoration: line-through;
+}
+
+/* Área de Explicación y Recompensa */
+.shell-feedback-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 16px;
+  text-align: left;
+  animation: fadeIn 0.2s ease;
+}
+
+.shell-feedback-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.shell-feedback-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e2e8f0;
+}
+
+.shell-tools-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tienda Rápida de Utilidades */
+.quick-shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.shop-item-card {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid var(--c-border-card);
+  border-radius: 16px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shop-item-icon {
+  font-size: 30px;
+  margin-bottom: 6px;
+}
+
+.shop-item-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--c-soft-aqua);
+}
+
+.shop-item-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.shop-buy-btn {
+  background: linear-gradient(135deg, var(--c-coral-pink), var(--c-coral-orange));
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shop-buy-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+/* Notificación Flotante / Toast (Checkpoint, etc.) */
+#game-toast {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--c-bg-card);
+  border: 2px solid var(--c-gold-yellow);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 16px;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 209, 82, 0.5);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 90;
+}
+
+#game-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* © jjedi90 — Todos los derechos reservados. */
